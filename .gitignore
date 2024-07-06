@@ -1,0 +1,11 @@
+/.vscode
+/.cache
+.DS_Store
+.env
+
+output
+*.tar.gz
+*.gz
+*.log
+
+tests
