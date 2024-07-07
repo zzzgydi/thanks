@@ -7,6 +7,8 @@ import (
 	"testing"
 
 	"github.com/spf13/viper"
+	"github.com/stretchr/testify/require"
+	"github.com/zzzgydi/thanks/service/parser"
 	"github.com/zzzgydi/thanks/service/thk"
 )
 
@@ -24,25 +26,22 @@ func TestThk(t *testing.T) {
 
 	// http get
 	resp, err := http.Get(pkJsonUrl)
-	if err != nil {
-		t.Error("Failed to get package.json:", err)
-		return
-	}
+	require.NoError(t, err)
 
 	defer resp.Body.Close()
 
 	// read body
 	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		t.Error("Failed to read body:", err)
-		return
-	}
+	require.NoError(t, err)
 
-	contributors, err := thk.ThkNode(body)
-	if err != nil {
-		t.Error("Failed to thk node:", err)
-		return
-	}
+	nodeParser := parser.NewNodeParser(6)
+	require.NotNil(t, nodeParser)
+
+	repos, err := nodeParser.GetGitRepos(body)
+	require.NoError(t, err)
+
+	contributors, err := thk.Thanks(repos, 6)
+	require.NoError(t, err)
 
 	for i, c := range contributors {
 		fmt.Printf("%-5d %-*s %-*s %.4f\n", i, 20, c.Login, 20, c.Repos[0].Repo, c.Total)
