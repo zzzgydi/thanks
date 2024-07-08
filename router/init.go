@@ -17,7 +17,6 @@ func InitHttpServer() {
 
 	// register routers
 	RootRouter(r)
-	HealthRouter(r)
 
 	logger := slog.NewLogLogger(L.Handler, slog.LevelError)
 
