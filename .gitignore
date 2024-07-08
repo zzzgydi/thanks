@@ -3,6 +3,7 @@
 .DS_Store
 .env
 
+log
 output
 *.tar.gz
 *.gz

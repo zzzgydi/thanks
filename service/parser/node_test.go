@@ -4,8 +4,12 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/zzzgydi/thanks/common/config"
+	"github.com/zzzgydi/thanks/common/initializer"
+	"github.com/zzzgydi/thanks/common/logger"
 )
 
 func TestParsePackageJson(t *testing.T) {
@@ -36,6 +40,11 @@ func TestGetGithubURLByNodeDep(t *testing.T) {
 }
 
 func TestNodeParser(t *testing.T) {
+	viper.AutomaticEnv()
+	logger.InitLogger(viper.GetString("TEST_ROOT_DIR"))
+	config.InitConfig()
+	initializer.InitInitializer()
+
 	data := []byte(`{
 		"dependencies": {
 			"express": "^4.17.1",

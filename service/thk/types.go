@@ -1,5 +1,7 @@
 package thk
 
+import "github.com/zzzgydi/thanks/model"
+
 type ThkContributor struct {
 	Login string               `json:"login"`
 	Id    int                  `json:"id"`
@@ -15,5 +17,5 @@ type ThkContributorRepo struct {
 type tmpThk struct {
 	repo         string
 	score        float64
-	contributors []*Contributor
+	contributors []*model.GitContributor
 }

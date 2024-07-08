@@ -3,6 +3,7 @@ package common
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/spf13/viper"
 	slogGorm "github.com/zzzgydi/slog-gorm"
@@ -25,7 +26,7 @@ func initDatabase() error {
 	gormLogger := slogGorm.New(
 		slogGorm.WithHandler(L.Logger.Handler()),
 		slogGorm.WithParameterizedQueries(true),
-		slogGorm.WithSlowThreshold(200),
+		slogGorm.WithSlowThreshold(200*time.Millisecond),
 	)
 
 	var dialector gorm.Dialector
@@ -39,7 +40,7 @@ func initDatabase() error {
 		})
 	} else if strings.HasPrefix(dsn, "sqlite://") {
 		dsn = strings.TrimPrefix(dsn, "sqlite://")
-		dialector = gorm.Dialector(sqlite.Open(dsn))
+		dialector = sqlite.Open(dsn)
 	} else {
 		return fmt.Errorf("unknown database dsn")
 	}

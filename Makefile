@@ -20,4 +20,5 @@ export $(shell sed 's/=.*//' .env)
 
 .PHONY: test
 test:
-	go test -v ./...
+	go test -cover ./service/parser
+	go test -cover ./service/thk

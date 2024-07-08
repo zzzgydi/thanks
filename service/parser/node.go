@@ -3,9 +3,12 @@ package parser
 import (
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"strings"
 	"sync"
+
+	"github.com/zzzgydi/thanks/model"
 )
 
 var _ IParser = (*NodeParser)(nil)
@@ -41,8 +44,22 @@ func (l *NodeParser) GetGitRepos(data []byte) ([]string, error) {
 				<-concurrency
 			}()
 
-			repo, err := getGithubURLByNodeDep(dep)
+			repo, err := getNodeRepo(dep)
 			if err != nil {
+				repo, err = getGithubURLByNodeDep(dep)
+				if err != nil {
+					return
+				}
+
+				if err := model.CreateNodeRepo(&model.NodeRepo{
+					Pkg:  dep,
+					Repo: repo,
+				}); err != nil {
+					slog.Error("create node repo error", "pkg", dep, "repo", repo, "err", err)
+				}
+			}
+
+			if repo == "" {
 				return
 			}
 
@@ -61,6 +78,15 @@ func (l *NodeParser) GetGitRepos(data []byte) ([]string, error) {
 	}
 
 	return result, nil
+}
+
+func getNodeRepo(pkg string) (string, error) {
+	repo, err := model.GetNodeRepoByPkg(pkg)
+	if err != nil {
+		return "", err
+	}
+
+	return repo.Repo, nil
 }
 
 type packageJSON struct {

@@ -13,17 +13,17 @@ func tempToThkContributor(temp []*tmpThk) []*ThkContributor {
 
 	for _, t := range temp {
 		for _, c := range t.contributors {
-			if _, ok := conMap[c.Id]; !ok {
-				conMap[c.Id] = &ThkContributor{
+			if _, ok := conMap[c.GitId]; !ok {
+				conMap[c.GitId] = &ThkContributor{
 					Login: c.Login,
-					Id:    c.Id,
+					Id:    c.GitId,
 				}
 			}
 
 			curScore := t.score / total * c.Score
 
-			conMap[c.Id].Total += curScore
-			conMap[c.Id].Repos = append(conMap[c.Id].Repos, ThkContributorRepo{
+			conMap[c.GitId].Total += curScore
+			conMap[c.GitId].Repos = append(conMap[c.GitId].Repos, ThkContributorRepo{
 				Repo:  t.repo,
 				Score: curScore,
 			})
