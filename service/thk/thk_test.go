@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"testing"
+	"time"
 
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/require"
@@ -13,6 +15,12 @@ import (
 )
 
 func TestThk(t *testing.T) {
+	startTime := time.Now().Unix()
+	defer func() {
+		endTime := time.Now().Unix()
+		fmt.Printf("----------------\nCost Time: %d\n", endTime-startTime)
+	}()
+
 	viper.AutomaticEnv()
 
 	if err := thk.InitTest(); err != nil {
@@ -21,8 +29,6 @@ func TestThk(t *testing.T) {
 	}
 
 	pkJsonUrl := "https://github.com/zzzgydi/ailiuliu/raw/main/web/package.json"
-
-	fmt.Println(pkJsonUrl)
 
 	// http get
 	resp, err := http.Get(pkJsonUrl)
@@ -34,7 +40,7 @@ func TestThk(t *testing.T) {
 	body, err := io.ReadAll(resp.Body)
 	require.NoError(t, err)
 
-	nodeParser := parser.NewNodeParser(6)
+	nodeParser := parser.NewNodeParser(20)
 	require.NotNil(t, nodeParser)
 
 	repos, err := nodeParser.GetGitRepos(body)
@@ -44,6 +50,13 @@ func TestThk(t *testing.T) {
 	require.NoError(t, err)
 
 	for i, c := range contributors {
-		fmt.Printf("%-5d %-*s %-*s %.4f\n", i, 20, c.Login, 20, c.Repos[0].Repo, c.Total)
+		repos := make([]string, 0, len(c.Repos))
+		for _, r := range c.Repos {
+			repos = append(repos, r.Repo)
+		}
+
+		repo := strings.Join(repos, ", ")
+
+		fmt.Printf("%-5d %-*s %.4f%%\t%s\n", i, 30, c.Login, c.Total*100, repo)
 	}
 }

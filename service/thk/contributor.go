@@ -57,19 +57,28 @@ func GetRepoInfo(repo string) (*RepoInfo, error) {
 }
 
 func GetContributors(repo string) ([]*Contributor, error) {
-	apiURL := fmt.Sprintf("https://api.github.com/repos/%s/contributors?page=1&per_page=66", repo)
+	apiURL := fmt.Sprintf("https://api.github.com/repos/%s/contributors?page=1&per_page=100", repo)
 
 	var contributors []*Contributor
 	if err := githubCurl(apiURL, "GET", nil, &contributors); err != nil {
 		return nil, err
 	}
-	return contributors, nil
+
+	// filter out non-user contributors, such as "bot"
+	var filteredContributors []*Contributor
+	for _, c := range contributors {
+		if c.Type == "User" {
+			filteredContributors = append(filteredContributors, c)
+		}
+	}
+
+	return filteredContributors, nil
 }
 
 func CalculateScore(repoInfo *RepoInfo, contributorsCount int) float64 {
-	weightStargazers := 0.5
-	weightForks := 0.3
-	weightContributors := 0.1
+	weightStargazers := 0.4
+	weightForks := 0.2
+	weightContributors := 0.2
 
 	score := float64(repoInfo.StargazersCount)*weightStargazers +
 		float64(repoInfo.ForksCount)*weightForks +
