@@ -13,3 +13,11 @@ dev: build
 	mkdir -p $(OUTDIR)/log
 	@if [ -f .env ]; then cp .env $(OUTDIR)/.env; fi
 	cd $(OUTDIR) && ./$(PROJECTNAME)
+
+
+include .env
+export $(shell sed 's/=.*//' .env)
+
+.PHONY: test
+test:
+	go test -v ./...
