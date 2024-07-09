@@ -42,7 +42,7 @@ func initDatabase() error {
 		dsn = strings.TrimPrefix(dsn, "sqlite://")
 		dialector = sqlite.Open(dsn)
 	} else {
-		return fmt.Errorf("unknown database dsn")
+		return fmt.Errorf("unknown database dsn: %s", dsn)
 	}
 
 	db, err := gorm.Open(dialector, &gorm.Config{Logger: gormLogger, PrepareStmt: true})
@@ -55,5 +55,5 @@ func initDatabase() error {
 }
 
 func init() {
-	initializer.Register("mysql", initDatabase)
+	initializer.Register("database", initDatabase)
 }
