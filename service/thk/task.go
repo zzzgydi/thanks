@@ -9,24 +9,26 @@ import (
 )
 
 type ThankTask struct {
-	lang   string
-	data   []byte
-	task   *model.Task
-	parser parser.IParser
-	repos  []string
+	lang     string
+	minScore float64
+	data     []byte
+	task     *model.Task
+	parser   parser.IParser
+	repos    []string
 }
 
-func NewThankTask(lang string, data []byte) (*ThankTask, error) {
+func NewThankTask(lang string, minScore float64, data []byte) (*ThankTask, error) {
 	tt := &ThankTask{
-		lang: lang,
-		data: data,
+		lang:     lang,
+		minScore: minScore,
+		data:     data,
 	}
 
 	if err := tt.prepare(); err != nil {
 		return nil, err
 	}
 
-	task, err := model.CreateTask(lang)
+	task, err := model.CreateTask(lang, minScore)
 	if err != nil {
 		return nil, err
 	}
@@ -89,5 +91,20 @@ func (tt *ThankTask) Run() ([]*ThkContributor, error) {
 		return nil, err
 	}
 
-	return contributors, nil
+	minScore := tt.minScore
+	if minScore < 0.0001 {
+		minScore = 0.0001
+	}
+	if minScore > 0.1 {
+		minScore = 0.1
+	}
+
+	ret := make([]*ThkContributor, 0, len(contributors))
+	for _, c := range contributors {
+		if c.Total >= minScore {
+			ret = append(ret, c)
+		}
+	}
+
+	return ret, nil
 }

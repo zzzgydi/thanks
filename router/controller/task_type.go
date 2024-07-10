@@ -7,8 +7,9 @@ import (
 )
 
 type CreateTaskRequest struct {
-	Lang string `json:"lang"`
-	Url  string `json:"url"`
+	Lang     string  `json:"lang"`
+	Url      string  `json:"url"`
+	MinScore float64 `json:"min_score"`
 }
 
 type TaskResponse struct {

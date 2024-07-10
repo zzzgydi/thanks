@@ -18,7 +18,15 @@ func PostCreateTask(c *gin.Context) {
 		return
 	}
 
-	task, err := thk.NewThankTask(req.Lang, data)
+	minScore := req.MinScore
+	if req.MinScore < 0.0001 {
+		minScore = 0.0001
+	}
+	if req.MinScore > 0.1 {
+		minScore = 0.1
+	}
+
+	task, err := thk.NewThankTask(req.Lang, minScore, data)
 	if err != nil {
 		ReturnServerError(c, err)
 		return
