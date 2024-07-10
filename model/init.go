@@ -12,6 +12,7 @@ func initModel() error {
 			&GitRepo{},
 			&GitContributor{},
 			&NodeRepo{},
+			&Task{},
 		)
 	}
 
