@@ -19,6 +19,9 @@ var MDB *gorm.DB
 
 func initDatabase() error {
 	dsn := viper.GetString("DATABASE_DSN")
+	if dsn[0] == '"' && dsn[len(dsn)-1] == '"' {
+		dsn = dsn[1 : len(dsn)-1]
+	}
 	if dsn == "" {
 		return fmt.Errorf("database dsn error")
 	}
