@@ -45,13 +45,17 @@ export default function Index() {
   });
 
   return (
-    <div className="w-screen h-screen h-dvh noise-bg flex flex-col items-center justify-center">
+    <div className="w-screen min-h-dvh noise-bg flex flex-col items-center justify-center">
       <h1 className="main-text px-6">OpenSource Thanks</h1>
 
       <div className="w-full max-w-[750px] px-8 py-8 mb-[100px] space-y-2">
         <div className="flex items-center gap-2">
           {["node", "golang"].map((i) => (
-            <div className="flex items-center gap-1" onClick={() => setLang(i)}>
+            <div
+              key={i}
+              className="flex items-center gap-1"
+              onClick={() => setLang(i)}
+            >
               <input
                 type="radio"
                 name="lang"
