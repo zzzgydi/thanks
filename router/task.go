@@ -11,4 +11,5 @@ func TaskRouter(r *gin.Engine) {
 	api.Use(middleware.LoggerMiddleware)
 
 	api.POST("/task/create", controller.PostCreateTask)
+	api.POST("/task/detail", controller.PostDetailTask)
 }

@@ -46,3 +46,31 @@ func PostCreateTask(c *gin.Context) {
 		Contributions: contributions,
 	})
 }
+
+func PostDetailTask(c *gin.Context) {
+	var req DetailTaskRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		ReturnBadRequest(c, err)
+		return
+	}
+
+	task, err := thk.NewThankTaskFromId(req.Id)
+	if err != nil {
+		ReturnServerError(c, err)
+		return
+	}
+
+	contributions, err := task.Run()
+	if err != nil {
+		ReturnServerError(c, err)
+		return
+	}
+
+	ReturnSuccess(c, &TaskResponse{
+		Id:            task.Task().Id,
+		Lang:          task.Task().Lang,
+		CreatedAt:     task.Task().CreatedAt,
+		UpdatedAt:     task.Task().UpdatedAt,
+		Contributions: contributions,
+	})
+}

@@ -12,6 +12,11 @@ type CreateTaskRequest struct {
 	MinScore float64 `json:"min_score"`
 }
 
+type DetailTaskRequest struct {
+	Id       string   `json:"id"`
+	MinScore *float64 `json:"min_score,omitempty"`
+}
+
 type TaskResponse struct {
 	Id            string                `json:"id"`
 	Lang          string                `json:"lang"`

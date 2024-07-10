@@ -98,8 +98,8 @@ export default function Index() {
             <p className="mt-4">Your Task ID is: {resultId}</p>
             <p className="mt-4">
               You can check the progress{" "}
-              <Link to={`/task/${resultId}`} className="text-blue-500">
-                /task/{resultId}
+              <Link to={`/t/${resultId}`} className="text-blue-500">
+                /t/{resultId}
               </Link>
             </p>
           </div>
