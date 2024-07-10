@@ -1,4 +1,9 @@
 import type { MetaFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
+import { useLockFn } from "ahooks";
+import { useState } from "react";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 
 export const meta: MetaFunction = () => {
   return [
@@ -8,41 +13,94 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+  const [lang, setLang] = useState("node");
+  const [minScore, setMinScore] = useState(0.0001);
+  const [url, setUrl] = useState(
+    "https://github.com/zzzgydi/thanks/raw/main/web/package.json"
+  );
+  const [loading, setLoading] = useState(false);
+  const [resultId, setResultId] = useState<string | null>(null);
+
+  const handleSubmit = useLockFn(async () => {
+    if (!url || loading) return;
+    setLoading(true);
+
+    try {
+      const result = await fetch("/api/task/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lang,
+          url,
+          min_score: Math.max(minScore, 0.0001),
+        }),
+      }).then((res) => res.json());
+      console.log(result);
+      setResultId(result.data.id);
+    } catch (error: any) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  });
+
   return (
-    <div className="font-sans p-4 frosted-glass mx-10">
-      <h1 className="text-3xl">Welcome to Remix</h1>
-      <ul className="list-disc mt-4 pl-6 space-y-2">
-        <li>
-          <a
-            className="text-blue-700 underline visited:text-purple-900"
-            target="_blank"
-            href="https://remix.run/start/quickstart"
-            rel="noreferrer"
-          >
-            5m Quick Start
-          </a>
-        </li>
-        <li>
-          <a
-            className="text-blue-700 underline visited:text-purple-900"
-            target="_blank"
-            href="https://remix.run/start/tutorial"
-            rel="noreferrer"
-          >
-            30m Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            className="text-blue-700 underline visited:text-purple-900"
-            target="_blank"
-            href="https://remix.run/docs"
-            rel="noreferrer"
-          >
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+    <div className="w-screen h-screen h-dvh noise-bg flex flex-col items-center justify-center">
+      <h1 className="main-text px-6">OpenSource Thanks</h1>
+
+      <div className="w-full max-w-[750px] px-8 py-8 mb-[100px] space-y-2">
+        <div className="flex items-center gap-2">
+          {["node", "golang"].map((i) => (
+            <div className="flex items-center gap-1" onClick={() => setLang(i)}>
+              <input
+                type="radio"
+                name="lang"
+                value={i}
+                checked={lang === i}
+                onChange={() => setLang(i)}
+              />
+              <label className="cursor-pointer">{i}</label>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span>Min Score</span>
+          <Input
+            className="max-w-[100px]"
+            type="number"
+            value={minScore}
+            onChange={(e) => setMinScore(Number(e.target.value))}
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Input
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder={
+              lang === "node"
+                ? "https://path/to/your/package.json"
+                : "https://path/to/your/go.mod"
+            }
+          />
+
+          <Button onClick={handleSubmit} disabled={loading}>
+            {loading ? "Creating" : "Create"}
+          </Button>
+        </div>
+        {resultId && (
+          <div>
+            <p className="mt-4">Your Task ID is: {resultId}</p>
+            <p className="mt-4">
+              You can check the progress{" "}
+              <Link to={`/task/${resultId}`} className="text-blue-500">
+                /task/{resultId}
+              </Link>
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
