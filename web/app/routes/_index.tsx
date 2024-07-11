@@ -4,6 +4,7 @@ import { useLockFn } from "ahooks";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { IThkTaskResponse } from "~/services/types";
 
 export const meta: MetaFunction = () => {
   return [
@@ -19,7 +20,7 @@ export default function Index() {
     "https://github.com/zzzgydi/thanks/raw/main/web/package.json"
   );
   const [loading, setLoading] = useState(false);
-  const [resultId, setResultId] = useState<string | null>(null);
+  const [result, setResult] = useState<IThkTaskResponse | null>(null);
 
   const handleSubmit = useLockFn(async () => {
     if (!url || loading) return;
@@ -36,7 +37,7 @@ export default function Index() {
         }),
       }).then((res) => res.json());
       console.log(result);
-      setResultId(result.data.id);
+      setResult(result.data);
     } catch (error: any) {
       console.error(error);
     } finally {
@@ -67,7 +68,7 @@ export default function Index() {
             </div>
           ))}
         </div>
-
+        {/* 
         <div className="flex items-center gap-2">
           <span>Min Score</span>
           <Input
@@ -76,7 +77,7 @@ export default function Index() {
             value={minScore}
             onChange={(e) => setMinScore(Number(e.target.value))}
           />
-        </div>
+        </div> */}
 
         <div className="flex items-center gap-2">
           <Input
@@ -93,13 +94,13 @@ export default function Index() {
             {loading ? "Creating" : "Create"}
           </Button>
         </div>
-        {resultId && (
+        {result && (
           <div>
-            <p className="mt-4">Your Task ID is: {resultId}</p>
+            <p className="mt-4">Your Task ID is: {result.id}</p>
             <p className="mt-4">
               You can check the progress{" "}
-              <Link to={`/t/${resultId}`} className="text-blue-500">
-                /t/{resultId}
+              <Link to={`/t/${result.id}`} className="text-blue-500">
+                /t/{result.id}
               </Link>
             </p>
           </div>

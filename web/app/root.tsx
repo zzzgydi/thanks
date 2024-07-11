@@ -9,6 +9,10 @@ import {
 } from "@remix-run/react";
 import "~/assets/global.css";
 
+export const links = () => [
+  { rel: "icon", type: "image/png", href: "/logo.png" },
+];
+
 function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
