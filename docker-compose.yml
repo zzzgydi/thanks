@@ -1,0 +1,68 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_DB: thanks
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    networks:
+      - thanks_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    networks:
+      - thanks_network
+    volumes:
+      - redis_data:/data
+
+  thanks-server:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: thanks-server
+    environment:
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+      DATABASE_DSN: postgres://myuser:mypassword@postgres:5432/thanks?sslmode=disable
+      REDIS_DSN: redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - thanks_network
+
+  thanks-web:
+    build:
+      context: ./web
+      dockerfile: ./Dockerfile
+    container_name: thanks-web
+    environment:
+      THANKS_SERVER: http://thanks-server:14090
+    depends_on:
+      - thanks-server
+    networks:
+      - thanks_network
+
+  gateway:
+    image: nginx:latest
+    container_name: gateway
+    depends_on:
+      - thanks-server
+      - thanks-web
+    networks:
+      - thanks_network
+    ports:
+      - "8080:80"
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/nginx.conf:ro
+
+networks:
+  thanks_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:

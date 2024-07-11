@@ -10,3 +10,4 @@ output
 *.log
 
 tests
+deploy.sh
