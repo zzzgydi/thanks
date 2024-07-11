@@ -13,14 +13,17 @@ type CreateTaskRequest struct {
 }
 
 type DetailTaskRequest struct {
-	Id       string   `json:"id"`
-	MinScore *float64 `json:"min_score,omitempty"`
+	Id     string `json:"id"`
+	Offset int    `json:"offset,omitempty"`
+	Size   int    `json:"size,omitempty"`
 }
 
 type TaskResponse struct {
-	Id            string                `json:"id"`
-	Lang          string                `json:"lang"`
-	Contributions []*thk.ThkContributor `json:"contributions"`
-	CreatedAt     time.Time             `json:"created_at"`
-	UpdatedAt     time.Time             `json:"updated_at"`
+	Id        string                `json:"id"`
+	Lang      string                `json:"lang"`
+	Offset    int                   `json:"offset"`
+	Total     int                   `json:"total"`
+	List      []*thk.ThkContributor `json:"list"`
+	CreatedAt time.Time             `json:"created_at"`
+	UpdatedAt time.Time             `json:"updated_at"`
 }
