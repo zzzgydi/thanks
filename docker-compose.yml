@@ -25,6 +25,7 @@ services:
       dockerfile: ./Dockerfile
     container_name: thanks-server
     environment:
+      DATABASE_AUTO_MIGRATE: true
       GITHUB_TOKEN: ${GITHUB_TOKEN}
       DATABASE_DSN: postgres://myuser:mypassword@postgres:5432/thanks?sslmode=disable
       REDIS_DSN: redis://redis:6379
