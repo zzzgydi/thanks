@@ -1,6 +1,7 @@
 package common
 
 import (
+	"database/sql"
 	"fmt"
 	"strings"
 	"time"
@@ -35,10 +36,15 @@ func initDatabase() error {
 	var dialector gorm.Dialector
 
 	if strings.HasPrefix(dsn, "mysql://") {
+		dsn = strings.TrimPrefix(dsn, "mysql://")
 		dialector = mysql.Open(dsn)
 	} else if strings.HasPrefix(dsn, "postgres://") {
+		sqlDB, err := sql.Open("pgx", dsn)
+		if err != nil {
+			return err
+		}
 		dialector = postgres.New(postgres.Config{
-			DSN:                  dsn,
+			Conn:                 sqlDB,
 			PreferSimpleProtocol: true,
 		})
 	} else if strings.HasPrefix(dsn, "sqlite://") {
