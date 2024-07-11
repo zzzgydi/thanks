@@ -1,4 +1,3 @@
-import type { MetaFunction } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
 import { useLockFn } from "ahooks";
 import { useState } from "react";
@@ -7,19 +6,9 @@ import { Input } from "~/components/ui/input";
 import { LangSettings } from "~/services/constants";
 import GithubSvg from "~/assets/github.svg?react";
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "OpenSource Thanks" },
-    { name: "description", content: "Thank You for Your Contributions" },
-  ];
-};
-
 export default function Index() {
   const [lang, setLang] = useState("node");
-
-  const [url, setUrl] = useState(
-    "https://github.com/zzzgydi/thanks/raw/main/web/package.json"
-  );
+  const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -112,7 +101,11 @@ export default function Index() {
         )}
       </div>
 
-      <footer className="mt-auto flex items-center py-2">
+      <footer className="mt-auto flex items-center py-2 gap-2 px-6">
+        <div className="text-sm text-muted-foreground">
+          Copyright © 2024 OpenSourceThanks. All rights reserved.
+        </div>
+
         <a href="https://github.com/zzzgydi/thanks">
           <GithubSvg className="w-6 h-6" />
         </a>
