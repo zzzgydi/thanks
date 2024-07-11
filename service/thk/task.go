@@ -84,27 +84,28 @@ func (tt *ThankTask) Run() ([]*ThkContributor, error) {
 		if err != nil {
 			return nil, err
 		}
+
+		return Thanks(tt.repos, 20)
+	} else if tt.repos != nil {
+		return ThanksReadOnly(tt.repos)
 	}
 
-	contributors, err := Thanks(tt.repos, 20)
-	if err != nil {
-		return nil, err
-	}
+	return nil, fmt.Errorf("unhandled case")
 
-	minScore := tt.minScore
-	if minScore < 0.0001 {
-		minScore = 0.0001
-	}
-	if minScore > 0.1 {
-		minScore = 0.1
-	}
+	// minScore := tt.minScore
+	// if minScore < 0.0001 {
+	// 	minScore = 0.0001
+	// }
+	// if minScore > 0.1 {
+	// 	minScore = 0.1
+	// }
 
-	ret := make([]*ThkContributor, 0, len(contributors))
-	for _, c := range contributors {
-		if c.Total >= minScore {
-			ret = append(ret, c)
-		}
-	}
+	// ret := make([]*ThkContributor, 0, len(contributors))
+	// for _, c := range contributors {
+	// 	if c.Total >= minScore {
+	// 		ret = append(ret, c)
+	// 	}
+	// }
 
-	return ret, nil
+	// return ret, nil
 }

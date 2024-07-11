@@ -30,3 +30,11 @@ func GetGitContributorsByRepoId(repoId uint64) ([]*GitContributor, error) {
 	}
 	return gitContributors, nil
 }
+
+func GetAllGitContributors(repoIdList []uint64) ([]*GitContributor, error) {
+	var gitContributors []*GitContributor
+	if err := common.MDB.Where("repo_id IN ?", repoIdList).Find(&gitContributors).Error; err != nil {
+		return nil, err
+	}
+	return gitContributors, nil
+}

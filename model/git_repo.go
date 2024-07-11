@@ -30,3 +30,11 @@ func GetGitRepoByRepoName(repo string) (*GitRepo, error) {
 	}
 	return &gitRepo, nil
 }
+
+func GetAllRepos(repos []string) ([]*GitRepo, error) {
+	var gitRepos []*GitRepo
+	if err := common.MDB.Where("repo IN ?", repos).Find(&gitRepos).Error; err != nil {
+		return nil, err
+	}
+	return gitRepos, nil
+}

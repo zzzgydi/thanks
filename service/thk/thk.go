@@ -54,3 +54,44 @@ func ThkRepo(repo string) (float64, []*model.GitContributor, error) {
 
 	return git.RepoScore(), git.GetContributors(), nil
 }
+
+func ThanksReadOnly(repos []string) ([]*ThkContributor, error) {
+	temp := make([]*tmpThk, 0)
+
+	gitRepos, err := model.GetAllRepos(repos)
+	if err != nil {
+		return nil, err
+	}
+
+	repoIds := make([]uint64, 0, len(gitRepos))
+	for _, repo := range gitRepos {
+		repoIds = append(repoIds, repo.Id)
+	}
+
+	gitContributors, err := model.GetAllGitContributors(repoIds)
+	if err != nil {
+		return nil, err
+	}
+
+	conMap := make(map[uint64][]*model.GitContributor)
+	for _, c := range gitContributors {
+		conMap[c.RepoId] = append(conMap[c.RepoId], c)
+	}
+
+	for _, repo := range gitRepos {
+		contributors, ok := conMap[repo.Id]
+		if !ok {
+			continue
+		}
+
+		score := CalRepoScore(repo, contributors)
+
+		temp = append(temp, &tmpThk{
+			repo:         repo.Repo,
+			score:        score,
+			contributors: contributors,
+		})
+	}
+
+	return tempToThkContributor(temp), nil
+}

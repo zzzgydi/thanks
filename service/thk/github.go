@@ -151,15 +151,17 @@ func (g *GithubThk) fetchContributors() error {
 }
 
 func (g *GithubThk) RepoScore() float64 {
-	repoInfo := g.GetRepoInfo()
+	return CalRepoScore(g.GetRepoInfo(), g.contributors)
+}
 
+func CalRepoScore(gitRepo *model.GitRepo, contributors []*model.GitContributor) float64 {
 	contributorsCount := 0
-	if g.contributors != nil {
-		contributorsCount = len(g.contributors)
+	if contributors != nil {
+		contributorsCount = len(contributors)
 	}
 
-	score := float64(repoInfo.StarCount)*weightStars +
-		float64(repoInfo.ForkCount)*weightForks +
+	score := float64(gitRepo.StarCount)*weightStars +
+		float64(gitRepo.ForkCount)*weightForks +
 		float64(contributorsCount)*weightContributors
 
 	if score < minRepoScore {
