@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { LangSettings } from "~/services/constants";
+import confetti from "canvas-confetti";
 import GithubSvg from "~/assets/github.svg?react";
 
 export default function Index() {
@@ -17,6 +18,8 @@ export default function Index() {
   const handleSubmit = useLockFn(async () => {
     if (!url || loading) return;
     setLoading(true);
+
+    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
 
     try {
       const result = await fetch("/api/task/create", {
@@ -96,7 +99,7 @@ export default function Index() {
 
         {error && (
           <div className="w-full max-h-[50vh] overflow-auto">
-            <pre className="text-destructive">{error}</pre>
+            <pre className="text-destructive">Error: {error}</pre>
           </div>
         )}
       </div>

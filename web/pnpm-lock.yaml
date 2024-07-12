@@ -26,6 +26,9 @@ importers:
       ahooks:
         specifier: ^3.8.0
         version: 3.8.0(react@18.3.0-canary-c3048aab4-20240326)
+      canvas-confetti:
+        specifier: ^1.9.3
+        version: 1.9.3
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -57,6 +60,9 @@ importers:
       '@remix-run/dev':
         specifier: ^2.10.2
         version: 2.10.2(@remix-run/react@2.10.2(react-dom@18.3.0-canary-c3048aab4-20240326(react@18.3.0-canary-c3048aab4-20240326))(react@18.3.0-canary-c3048aab4-20240326)(typescript@5.5.3))(@remix-run/serve@2.10.2(typescript@5.5.3))(@types/node@20.14.10)(typescript@5.5.3)(vite@5.3.3(@types/node@20.14.10))
+      '@types/canvas-confetti':
+        specifier: ^1.6.4
+        version: 1.6.4
       '@types/react':
         specifier: ^18.2.20
         version: 18.3.3
@@ -1101,6 +1107,9 @@ packages:
   '@types/acorn@4.0.6':
     resolution: {integrity: sha512-veQTnWP+1D/xbxVrPC3zHnCZRjSrKfhbMUlEA43iMZLu7EsnTtkJklIuwrCPbOi8YkvDQAiW05VQQFvvz9oieQ==}
 
+  '@types/canvas-confetti@1.6.4':
+    resolution: {integrity: sha512-fNyZ/Fdw/Y92X0vv7B+BD6ysHL4xVU5dJcgzgxLdGbn8O3PezZNIJpml44lKM0nsGur+o/6+NZbZeNTt00U1uA==}
+
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
 
@@ -1444,6 +1453,9 @@ packages:
 
   caniuse-lite@1.0.30001641:
     resolution: {integrity: sha512-Phv5thgl67bHYo1TtMY/MurjkHhV4EDaCosezRXgZ8jzA/Ub+wjxAvbGvjoFENStinwi5kCyOYV3mi5tOGykwA==}
+
+  canvas-confetti@1.9.3:
+    resolution: {integrity: sha512-rFfTURMvmVEX1gyXFgn5QMn81bYk70qa0HLzcIOSVEyl57n6o9ItHeBtUSWdvKAPY0xlvBHno4/v3QPrT83q9g==}
 
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
@@ -4859,6 +4871,8 @@ snapshots:
     dependencies:
       '@types/estree': 1.0.5
 
+  '@types/canvas-confetti@1.6.4': {}
+
   '@types/cookie@0.6.0': {}
 
   '@types/debug@4.1.12':
@@ -5320,6 +5334,8 @@ snapshots:
   camelcase@6.3.0: {}
 
   caniuse-lite@1.0.30001641: {}
+
+  canvas-confetti@1.9.3: {}
 
   ccount@2.0.1: {}
 
