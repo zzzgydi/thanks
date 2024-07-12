@@ -27,9 +27,10 @@ You can also create your project's open source contributors list directly at [Op
    cd thanks
    ```
 
-2. Build and start the application using Docker Compose:
+2. Prepare your github token, then build and start the application using Docker Compose:
 
    ```bash
+   export GITHUB_TOKEN=github_pat_xxx
    docker compose up
    ```
 
