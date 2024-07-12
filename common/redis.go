@@ -13,6 +13,9 @@ var RDB *redis.Client
 
 func initRedis() error {
 	dsn := viper.GetString("REDIS_DSN")
+	if dsn[0] == '"' && dsn[len(dsn)-1] == '"' {
+		dsn = dsn[1 : len(dsn)-1]
+	}
 	if dsn == "" {
 		return fmt.Errorf("redis dsn error")
 	}
